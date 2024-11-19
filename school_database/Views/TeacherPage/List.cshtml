@@ -1,0 +1,27 @@
+﻿<h2>Teacher List</h2>
+
+<!-- search form that takes startDate and endDate and passes data to display a list of teacher by the hiredate range -->
+<form method="get" action="/TeacherPage/SearchByHireDate">
+    <div>
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" name="startDate" />
+    </div>
+    <div>
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" name="endDate" />
+    </div>
+    <div>
+        <button type="submit">Search</button>
+    </div>
+</form>
+
+<hr />
+
+<!-- list of teachers -->
+@foreach (var Teacher in Model)
+{
+    <div>
+        <a href="/TeacherPage/Show/@Teacher.TeacherId">@Teacher.TeacherFName @Teacher.TeacherLName</a>
+        <p>Hire Date: @Teacher.HireDate.ToString("yyyy-MM-dd")</p>
+    </div>
+}

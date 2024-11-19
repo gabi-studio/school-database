@@ -1,0 +1,10 @@
+﻿@model School.Models.Course
+
+<h1>@Model.CourseName</h1>
+<p>Course Code: @Model.CourseCode</p>
+@if (Model.TeacherId.HasValue)
+{
+    <p>Teacher ID: @Model.TeacherId</p>
+}
+<p>Start Date: @Model.StartDate?.ToString("yyyy-M-d")</p>
+<p>Finish Date: @Model.FinishDate?.ToString("yyyy-M-d")</p>
