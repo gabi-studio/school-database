@@ -46,4 +46,6 @@ This project connects to a **MySQL database** and uses **ASP.NET Core MVC** for 
 - `GET /api/Student/ListStudents`: Gets all students.
 - `GET /api/Student/FindStudent/{id}`: Finds a student by ID.
 
-### **
+### **Courses**
+- `GET /api/Course/ListCourses`: Gets all courses.
+- `GET /api/Course/FindCourse/{id}`: Finds a course by ID.
