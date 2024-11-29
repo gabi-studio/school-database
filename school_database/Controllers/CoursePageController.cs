@@ -44,9 +44,64 @@ namespace School.Controllers
             }
             else
             {
+
+
                 // pass the Course object to the Show view
                 return View(SelectedCourse);
             }
         }
-    }
+
+
+
+        // GET: /CoursePage/NewCourse
+        /// <summary>
+        /// Displays a form to add a new course.
+        /// </summary>
+        /// <returns>A view with a form to add a course.</returns>
+   
+        [HttpGet]
+		public IActionResult NewCourse()
+		{
+			return View();
+		}
+
+
+        /// <summary>
+        /// Handles the submission of a new course form.
+        /// </summary>
+        /// <param name="NewCourse">A course object from the form.</param>
+        /// <returns>Redirects to the page of the new course created.</returns>
+		[HttpPost]
+		public IActionResult Create(Course NewCourse)
+		{
+			int CourseId = _api.AddCourse(NewCourse);
+			return RedirectToAction("Show", new { id = CourseId });
+		}
+
+
+        /// <summary>
+        /// Displays a confirmation page for deleting a course.
+        /// </summary>
+        /// <param name="id">The ID of the course to delete.</param>
+        /// <returns>A view asking for confirmation to delete selected course.</returns>
+        [HttpGet]
+		public IActionResult DeleteConfirm(int id)
+		{
+			Course SelectedCourse = _api.FindCourse(id); 
+			return View(SelectedCourse);
+		}
+
+
+        /// <summary>
+        /// Handles the deletion of a course.
+        /// </summary>
+        /// <param name="id">The ID of the course to delete.</param>
+        /// <returns>Redirects to the list of courses.</returns>
+        [HttpPost]
+		public IActionResult Delete(int id)
+		{
+			_api.DeleteCourse(id);
+			return RedirectToAction("List");
+		}
+	}
 }

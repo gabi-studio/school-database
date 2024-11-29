@@ -1,5 +1,9 @@
 ﻿@model School.Models.Student
 
 <h1>@Model.StudentFName @Model.StudentLName</h1>
+
+<a href="/StudentPage/List">Back to List</a>
+<a class="alert-warning" href="/StudentPage/DeleteConfirm/@Model.StudentId">Delete</a>
+
 <p>Student Number: @Model.StudentNumber</p>
 <p>Enrollment Date: @Model.EnrollDate.ToString("yyyy-M-d")</p>

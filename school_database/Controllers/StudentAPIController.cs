@@ -4,6 +4,7 @@ using School.Models;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 using System;
+using System.Diagnostics;
 
 namespace School.Controllers
 {
@@ -128,6 +129,96 @@ namespace School.Controllers
 
             // Return the Student object (it will be empty if no student was found)
             return SelectedStudent;
+        }
+
+        /// <summary>
+        /// Adds a new student to the database.
+        /// </summary>
+        /// <param name="NewStudent">A Student object containing details of the new student.</param>
+        /// <example>
+        /// POST: api/Student/AddStudent
+        /// Body:
+        /// {
+        ///     "StudentFName": "Harry",
+        ///     "StudentLName": "Potter",
+        ///     "StudentNumber": "S1234",
+        ///     "EnrollDate": "2025-01-01"
+        /// }
+        /// </example>
+        /// <returns>
+        /// The ID of the newly added student if successful.
+        /// </returns>
+        [HttpPost]
+        [Route("AddStudent")]
+        public int AddStudent([FromBody] Student NewStudent)
+        {
+            // 'using' will close the connection after the code executes 
+            using (MySqlConnection Connection = _context.AccessDatabase())
+            {
+                // open connection
+                Connection.Open();
+
+                // Create a new sql command
+                MySqlCommand Command = Connection.CreateCommand();
+
+
+                // sql command to insert new student properties into the students table in the database
+                Command.CommandText = "INSERT INTO students (studentfname, studentlname, studentnumber, enroldate) " +
+                                      "VALUES (@FirstName, @LastName, @StudentNumber, @EnrollDate)";
+                Command.Parameters.AddWithValue("@FirstName", NewStudent.StudentFName);
+                Command.Parameters.AddWithValue("@LastName", NewStudent.StudentLName);
+                Command.Parameters.AddWithValue("@StudentNumber", NewStudent.StudentNumber);
+                Command.Parameters.AddWithValue("@EnrollDate", NewStudent.EnrollDate);
+
+                // command that returns the number of rows affected by query
+                Command.ExecuteNonQuery();
+
+                // return the last inserted teacher id converted to int
+                return Convert.ToInt32(Command.LastInsertedId);
+            }
+
+            // if fail return 0
+
+            return 0;
+        }
+
+
+
+        /// <summary>
+        /// Deletes a student from the database by their ID.
+        /// </summary>
+        /// <param name="id">The ID of the student to delete.</param>
+        /// <example>
+        /// DELETE: api/Student/DeleteStudent/1
+        /// </example>
+        /// <returns>
+        /// The number of rows affected by the delete operation.
+        /// </returns>
+        [HttpDelete]
+        [Route("DeleteStudent/{id}")]
+        public int DeleteStudent(int id)
+
+        {
+            // 'using' will close the connection after the code executes 
+            using (MySqlConnection Connection = _context.AccessDatabase())
+            {
+                //open connection
+                Connection.Open();
+
+                // create new sql command
+                MySqlCommand Command = Connection.CreateCommand();
+
+                // sql query to delete from the students table, the student with the matching student id 
+                Command.CommandText = "DELETE FROM students WHERE studentid = @StudentId";
+                Command.Parameters.AddWithValue("@StudentId", id);
+
+                // command that returns the number of rows affected by query
+                return Command.ExecuteNonQuery();
+            }
+
+            // if fail return 0
+
+            return 0;
         }
     }
 }

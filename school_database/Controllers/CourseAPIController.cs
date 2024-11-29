@@ -4,6 +4,7 @@ using School.Models;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 using System;
+using System.Diagnostics;
 
 namespace School.Controllers    
 {
@@ -119,18 +120,108 @@ namespace School.Controllers
                     while (ResultSet.Read())
                     {
                         // access column information by the course table property/column name as an index
-                        int CourseId = Convert.ToInt32(ResultSet["courseid"]);
-                        string CourseCode = ResultSet["coursecode"].ToString();
-                        int TeacherId = Convert.ToInt32(ResultSet["teacherid"]);
-                        DateTime StartDate = Convert.ToDateTime(ResultSet["startdate"]);
-                        DateTime FinishDate = Convert.ToDateTime(ResultSet["finishdate"]);
-                        string CourseName = ResultSet["coursename"].ToString();
+                        SelectedCourse.CourseId = Convert.ToInt32(ResultSet["courseid"]);
+                        SelectedCourse.CourseCode = ResultSet["coursecode"].ToString();
+                        SelectedCourse.TeacherId = Convert.ToInt32(ResultSet["teacherid"]);
+                        SelectedCourse.StartDate = Convert.ToDateTime(ResultSet["startdate"]);
+                        SelectedCourse.FinishDate = Convert.ToDateTime(ResultSet["finishdate"]);
+                        SelectedCourse.CourseName = ResultSet["coursename"].ToString();
                     }
                 }
             }
 
             // return the Course object
             return SelectedCourse;
+          
+
         }
-    }
+
+		/// <summary>
+		/// Adds a new course to the database.
+		/// </summary>
+		/// <param name="NewCourse">A Course object containing details of the new course.</param>
+		/// <example>
+		/// POST: api/Course/AddCourse
+		/// Body:
+		/// {
+		///     "CourseCode": "HTTP5888",
+		///     "TeacherId": 1,
+		///     "StartDate": "2025-01-08",
+		///     "FinishDate": "2024-05-14",
+		///     "CourseName": "Web Entrepreneurship"
+		/// }
+		/// </example>
+		/// <returns>
+		/// The ID of the newly added course if successful.
+		/// </returns>
+		[HttpPost]
+		[Route("AddCourse")]
+		public int AddCourse([FromBody] Course NewCourse)
+		{
+            // 'using' will close the connection after the code executes 
+            using (MySqlConnection Connection = _context.AccessDatabase())
+			{
+				// open connection
+                Connection.Open();
+
+                // create a new sql command
+				MySqlCommand Command = Connection.CreateCommand();
+
+
+                // sql query to insert new course properties into the courses table in the database
+                Command.CommandText = "INSERT INTO courses (coursecode, teacherid, startdate, finishdate, coursename) " +
+									  "VALUES (@CourseCode, @TeacherId, @StartDate, @FinishDate, @CourseName)";
+				Command.Parameters.AddWithValue("@CourseCode", NewCourse.CourseCode);
+				Command.Parameters.AddWithValue("@TeacherId", NewCourse.TeacherId);
+				Command.Parameters.AddWithValue("@StartDate", NewCourse.StartDate);
+				Command.Parameters.AddWithValue("@FinishDate", NewCourse.FinishDate);
+				Command.Parameters.AddWithValue("@CourseName", NewCourse.CourseName);
+
+                // command that returns the number of rows affected by query
+                Command.ExecuteNonQuery();
+
+                // return the last inserted teacher id converted to int
+                return Convert.ToInt32(Command.LastInsertedId);
+			}
+
+            //if failure return 0
+
+            return 0;
+		}
+
+		/// <summary>
+		/// Deletes a course from the database by its ID.
+		/// </summary>
+		/// <param name="id">The ID of the course to delete.</param>
+		/// <example>
+		/// DELETE: api/Course/DeleteCourse/1
+		/// </example>
+		/// <returns>
+		/// The number of rows affected by the delete operation.
+		/// </returns>
+		[HttpDelete]
+		[Route("DeleteCourse/{id}")]
+		public int DeleteCourse(int id)
+		{
+            // 'using' will close the connection after the code executes 
+            using (MySqlConnection Connection = _context.AccessDatabase())
+			{
+				Connection.Open();
+				MySqlCommand Command = Connection.CreateCommand();
+
+
+                // sql query to delete from the courses table, the course with the matching course id 
+                Command.CommandText = "DELETE FROM courses WHERE courseid = @CourseId";
+				Command.Parameters.AddWithValue("@CourseId", id);
+
+
+                // command that returns the number of rows affected by query
+                return Command.ExecuteNonQuery();
+			}
+
+			//if failure return 0
+
+			return 0;
+		}
+	}
 }

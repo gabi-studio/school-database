@@ -1,6 +1,12 @@
 ﻿@model School.Models.Teacher
 
+
+
 <h1>@Model.TeacherFName @Model.TeacherLName</h1>
+
+<a href="/TeacherPage/List">Back to List</a>
+<a class="alert-warning" href="/TeacherPage/DeleteConfirm/@Model.TeacherId">Delete</a>
+
 <p>Hire Date: @Model.HireDate.ToString("yyyy-M-d")</p>
 <p>Employee Number: @Model.EmployeeNumber</p>
 <p>Salary: $@Model.Salary</p>

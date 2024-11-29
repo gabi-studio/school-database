@@ -1,5 +1,13 @@
 ﻿@model IEnumerable<School.Models.Course>
 
+<!-- link to the create new  course -->
+
+<div style="margin-bottom: 15px;">
+    <a href="/CoursePage/NewCourse" style="color: #080878; font-weight: bold; text-decoration: none;">+ Add New Course</a>
+</div>
+
+
+<!-- list of courses-->
 @foreach (var Course in Model)
 {
     <div>

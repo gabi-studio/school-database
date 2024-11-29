@@ -47,6 +47,57 @@ namespace School.Controllers
                 // otherwise pass the Student object to the Show view
                 return View(SelectedStudent);
             }
+
+           
+        }
+
+
+        // GET: /StudentPage/NewStudent
+        /// <summary>
+        /// Displays a form to add a new student.
+        /// </summary>
+        /// <returns>A view with a form to add a student.</returns>
+        [HttpGet]
+        public IActionResult NewStudent()
+        {
+            return View();
+        }
+
+
+        /// <summary>
+        /// Handles the submission of a new student form.
+        /// </summary>
+        /// <param name="NewStudent">A student object from the form.</param>
+        /// <returns>Redirects to the page of the new student created.</returns>
+        [HttpPost]
+        public IActionResult Create(Student NewStudent)
+        {
+            int StudentId = _api.AddStudent(NewStudent);
+            return RedirectToAction("Show", new { id = StudentId });
+        }
+
+        /// <summary>
+        /// Displays a confirmation page for deleting a student.
+        /// </summary>
+        /// <param name="id">The ID of the student to delete.</param>
+        /// <returns>A view asking for confirmation to delete selected student.</returns>
+        [HttpGet]
+        public IActionResult DeleteConfirm(int id)
+        {
+            Student SelectedStudent = _api.FindStudent(id); // assumign student exists
+            return View(SelectedStudent);
+        }
+
+        /// <summary>
+        /// Handles the deletion of a student.
+        /// </summary>
+        /// <param name="id">The ID of the student to delete.</param>
+        /// <returns>Redirects to the list of students.</returns>
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            _api.DeleteStudent(id);
+            return RedirectToAction("List");
         }
     }
 }

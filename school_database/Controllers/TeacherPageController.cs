@@ -55,5 +55,51 @@ namespace School.Controllers
             return View("List", Teachers);
         }
 
+        // GET: /TeacherPage/NewTeacher
+        /// <summary>
+        /// Displays a form to add a new teacher.
+        /// </summary>
+        /// <returns>A view with a form to add a teacher.</returns>
+        [HttpGet]
+        public IActionResult NewTeacher()
+        {
+            return View("NewTeacher");
+        }
+
+        /// <summary>
+        /// Handles the submission of a new teacher form.
+        /// </summary>
+        /// <param name="NewTeacher">A Teacher object from the form.</param>
+        /// <returns>Redirects to the list of teachers.</returns>
+        [HttpPost]
+        public IActionResult Create(Teacher NewTeacher)
+        {
+            int TeacherId = _api.AddTeacher(NewTeacher);
+            return RedirectToAction("Show", new { id = TeacherId });
+        }
+
+        /// <summary>
+        /// Displays a confirmation page for deleting a teacher.
+        /// </summary>
+        /// <param name="id">The ID of the teacher to delete.</param>
+        /// <returns>A view asking for confirmation to delete selected teacher.</returns>
+        public IActionResult DeleteConfirm(int id)
+        {
+            Teacher SelectedTeacher = _api.FindTeacher(id);
+            return View(SelectedTeacher);
+        }
+
+        /// <summary>
+        /// Handles the deletion of a teacher.
+        /// </summary>
+        /// <param name="id">The ID of the teacher to delete.</param>
+        /// <returns>Redirects to the list of teachers.</returns>
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            _api.DeleteTeacher(id);
+            return RedirectToAction("List");
+        }
+
     }
 }

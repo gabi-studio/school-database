@@ -1,6 +1,10 @@
 ﻿@model School.Models.Course
 
 <h1>@Model.CourseName</h1>
+
+<a href="/CoursePage/List">Back to List</a>
+<a class="alert-warning" href="/CoursePage/DeleteConfirm/@Model.CourseId">Delete</a>
+
 <p>Course Code: @Model.CourseCode</p>
 @if (Model.TeacherId.HasValue)
 {

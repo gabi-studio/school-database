@@ -1,0 +1,9 @@
+﻿@model School.Models.Teacher
+
+<h2>Delete Teacher</h2>
+<p>Are you sure you want to delete this teacher: @Model.TeacherFName @Model.TeacherLName?</p>
+
+<form method="post" action="/TeacherPage/Delete/@Model.TeacherId">
+    <button type="submit">Confirm Delete</button>
+</form>
+<a href="/TeacherPage/List">Cancel</a>
