@@ -4,7 +4,7 @@
 
 This is a basic project for a **School Management System** built using **ASP.NET Core**. 
 The current version only has the **Read**,  **Create**,  and **Delete** functionalities for managing Teachers, Students, and Courses, and the **Update** feature will be added in future versions.
-The **Create** and **Delete** functionalities are on the add-delete-functionality-branch.
+
 
 This project connects to a **MySQL database** and uses **ASP.NET Core MVC** for the web pages and **Web API** for the backend.
 
