@@ -19,6 +19,8 @@ This project connects to a **MySQL database** and uses **ASP.NET Core MVC** for 
 - Show an error message if the teacher ID is invalid.
 - Use a form to add a new teacher
 - Delete a teacher (with a confirmation page to safeguard delete)
+- Update an existing teacher
+- error messages when there are fields missing on form when updating a teacher
 
 ### **Students**
 - View a list of all students.
@@ -26,6 +28,7 @@ This project connects to a **MySQL database** and uses **ASP.NET Core MVC** for 
 - Show an error message if the student ID is invalid.
 - Use a form to add a new student
 - Delete a student (with a confirmation page to safeguard delete)
+- Update an existing student
 
 ### **Courses**
 - View a list of all courses.
@@ -33,12 +36,13 @@ This project connects to a **MySQL database** and uses **ASP.NET Core MVC** for 
 - Show an error message if the course ID is invalid.
 - Use a form to add a new course
 - Delete a course (with a confirmation page to safeguard delete)
+- Update an existing course
 
 ---
 
 ## **What Will Be Added in the Future**
 - **Create**: ~~Add new Teachers, Students, and Courses.~~ (Added 2024/11/29)
-- **Update**: Edit existing records in the database.
+- **Update**: ~~Edit existing records in the database.~~ (Added 2024/12/08)
 - **Delete**: ~~Remove records from the database.~~ (Added 2024/11/29)
 
 
