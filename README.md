@@ -46,23 +46,3 @@ This project connects to a **MySQL database** and uses **ASP.NET Core MVC** for 
 - **Delete**: ~~Remove records from the database.~~ (Added 2024/11/29)
 
 
-## **API Endpoints**
-
-### **Teachers**
-- `GET /api/Teacher/ListTeachers`: Gets all teachers.
-- `GET /api/Teacher/FindTeacher/{id}`: Finds a teacher by ID.
-- `GET /api/Teacher/SearchByHireDate?StartDate={StartDate}&EndDate={EndDate}`: Searches teachers hired between two dates.
-- `GET /api/Teacher/AddTeacher`: Adds a new teacher
-- `GET /api/Teacher/DeleteTeacher/{id}`: Deletes a teacher by ID.
-
-### **Students**
-- `GET /api/Student/ListStudents`: Gets all students.
-- `GET /api/Student/FindStudent/{id}`: Finds a student by ID.
-- `GET /api/Student/AddStudent`: Adds a new student
-- `GET /api/STudent/DeleteStudent/{id}`: Deletes a student by ID.
-
-### **Courses**
-- `GET /api/Course/ListCourses`: Gets all courses.
-- `GET /api/Course/FindCourse/{id}`: Finds a course by ID.
-- `GET /api/Course/AddCourse`: Adds a new course
-- `GET /api/Course/DeleteCourse/{id}`: Deletes a course by ID.
