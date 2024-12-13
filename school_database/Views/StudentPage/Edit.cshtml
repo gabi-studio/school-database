@@ -1,0 +1,37 @@
+﻿@model School.Models.Student
+
+<div id="containershow">
+    <nav>
+        <a class="navlink" href="/StudentPage/Show/@Model.StudentId">Back</a>
+    </nav>
+    <h2>Edit Student</h2>
+    <form method="POST" action="/StudentPage/Update/@Model.StudentId">
+        @if (ViewBag.ClientError != null)
+        {
+            <p style="color:red;">@ViewBag.ClientError</p>
+        }
+        <div class="inputrow">
+            <label for="StudentFName">First Name:</label>
+            <input type="text" id="StudentFName" name="StudentFName" value="@Model.StudentFName" />
+        </div>
+
+        <div class="inputrow">
+            <label for="StudentLName">Last Name:</label>
+            <input type="text" id="StudentLName" name="StudentLName" value="@Model.StudentLName" />
+        </div>
+
+        <div class="inputrow">
+            <label for="StudentNumber">Student Number:</label>
+            <input type="text" id="StudentNumber" name="StudentNumber" value="@Model.StudentNumber" />
+        </div>
+
+        <div class="inputrow">
+            <label for="EnrollDate">Enrollment Date:</label>
+            <input type="date" id="EnrollDate" name="EnrollDate" value="@Model.EnrollDate.ToString("yyyy-MM-dd")" />
+        </div>
+
+        <div class="inputrow">
+            <input type="submit" value="Update Student" />
+        </div>
+    </form>
+</div>

@@ -220,5 +220,55 @@ namespace School.Controllers
 
             return 0;
         }
-    }
+
+		/// <summary>
+		/// Updates a student's information in the database.
+		/// </summary>
+		/// <param name="id">The ID of the student to update.</param>
+		/// <param name="StudentData">A Student object with updated information.</param>
+		/// <example>
+		/// PUT: api/Student/UpdateStudent/1
+		/// Body:
+		/// {
+		///     "StudentFName": "Harry",
+		///     "StudentLName": "Potter",
+		///     "StudentNumber": "S1234",
+		///     "EnrollDate": "2025-01-01"
+		/// }
+		/// </example>
+		/// <returns>
+		/// The updated Student object or an appropriate error message if the update fails.
+		/// </returns>
+		[HttpPut]
+		[Route("UpdateStudent/{id}")]
+		public IActionResult UpdateStudent(int id, [FromBody] Student StudentData)
+		{
+			using (MySqlConnection Connection = _context.AccessDatabase())
+			{
+				Connection.Open();
+				MySqlCommand Command = Connection.CreateCommand();
+
+
+				// Parameterized SQL query to update the student
+				Command.CommandText = "UPDATE students SET studentfname = @StudentFName, studentlname = @StudentLName, " +
+									  "studentnumber = @StudentNumber, enroldate = @EnrollDate WHERE studentid = @StudentId";
+				Command.Parameters.AddWithValue("@StudentFName", StudentData.StudentFName);
+				Command.Parameters.AddWithValue("@StudentLName", StudentData.StudentLName);
+				Command.Parameters.AddWithValue("@StudentNumber", StudentData.StudentNumber);
+				Command.Parameters.AddWithValue("@EnrollDate", StudentData.EnrollDate);
+				Command.Parameters.AddWithValue("@StudentId", id);
+
+				int RowsAffected = Command.ExecuteNonQuery();
+
+				if (RowsAffected == 0)
+				{
+					return NotFound("Student not found.");
+				}
+			}
+
+			return Ok(FindStudent(id)); // Return the updated student
+		}
+
+
+	}
 }

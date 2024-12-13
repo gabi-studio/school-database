@@ -103,5 +103,46 @@ namespace School.Controllers
 			_api.DeleteCourse(id);
 			return RedirectToAction("List");
 		}
+
+
+		public IActionResult Edit(int id)
+		{
+			Course SelectedCourse = _api.FindCourse(id);
+			if (SelectedCourse.CourseId == 0)
+			{
+				ViewBag.ErrorMessage = "Course not found. Please check the ID.";
+				return View("CourseError");
+			}
+			return View(SelectedCourse);
+		}
+
+		[HttpPost]
+		public IActionResult Update(int id, string CourseCode, int TeacherId, DateTime StartDate, DateTime FinishDate, string CourseName)
+		{
+            // error message for if course name is empty
+            if (string.IsNullOrEmpty(CourseName))
+			{
+				ViewBag.ClientError = "Please fill course name .";
+                return Edit(id);
+            }
+			if (StartDate > FinishDate)
+			{
+				ViewBag.ClientError = "Start date needs to be before the finish date.";
+                return Edit(id);
+            }
+
+			Course UpdatedCourse = new Course
+			{
+				CourseCode = CourseCode,
+				TeacherId = TeacherId,
+				StartDate = StartDate,
+				FinishDate = FinishDate,
+				CourseName = CourseName
+			};
+
+			_api.UpdateCourse(id, UpdatedCourse);
+			return RedirectToAction("Show", new { id = id });
+		}
+
 	}
 }

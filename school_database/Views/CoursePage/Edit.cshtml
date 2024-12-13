@@ -1,0 +1,48 @@
+﻿@model School.Models.Course
+
+<div id="containershow">
+    <nav>
+        <a class="navlink" href="/CoursePage/Show/@Model.CourseId">Back</a>
+    </nav>
+    <h2>Edit Course</h2>
+
+    @if (ViewBag.ClientError != null)
+    {
+        <div style="color: red; margin-bottom: 15px;">@ViewBag.ClientError</div>
+    }
+
+    <form method="POST" action="/CoursePage/Update/@Model.CourseId">
+        @if (ViewBag.ClientError != null)
+        {
+            <p style="color:red;">@ViewBag.ClientError</p>
+        }
+        <div class="inputrow">
+            <label for="CourseCode">Course Code:</label>
+            <input type="text" id="CourseCode" name="CourseCode" value="@Model.CourseCode" />
+        </div>
+
+        <div class="inputrow">
+            <label for="TeacherId">Teacher ID:</label>
+            <input type="number" id="TeacherId" name="TeacherId" value="@Model.TeacherId"  />
+        </div>
+
+        <div class="inputrow">
+            <label for="StartDate">Start Date:</label>
+            <input type="date" id="StartDate" name="StartDate" value="@Model.StartDate?.ToString("yyyy-MM-dd")"  />
+        </div>
+
+        <div class="inputrow">
+            <label for="FinishDate">Finish Date:</label>
+            <input type="date" id="FinishDate" name="FinishDate" value="@Model.FinishDate?.ToString("yyyy-MM-dd")"  />
+        </div>
+
+        <div class="inputrow">
+            <label for="CourseName">Course Name:</label>
+            <input type="text" id="CourseName" name="CourseName" value="@Model.CourseName" />
+        </div>
+
+        <div class="inputrow">
+            <input type="submit" value="Update Course" />
+        </div>
+    </form>
+</div>

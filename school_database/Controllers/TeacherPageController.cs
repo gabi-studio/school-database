@@ -101,5 +101,105 @@ namespace School.Controllers
             return RedirectToAction("List");
         }
 
+        /// <summary>
+        /// Displays a form to edit a teacher's information.
+        /// </summary>
+        /// <param name="id">The ID of the teacher to edit.</param>
+        /// <example>
+        /// GET: /TeacherPage/Edit/1
+        /// </example>
+        /// <returns>A view with a form pre-filled with the teacher's information.</returns>
+        public IActionResult Edit(int id)
+        {
+            Teacher SelectedTeacher = _api.FindTeacher(id);
+            if (SelectedTeacher == null || SelectedTeacher.TeacherId <= 0)
+            {
+                ViewBag.ErrorMessage = "Teacher not found. Please check that you entered the correct ID.";
+                return RedirectToAction("List");
+            }
+            return View(SelectedTeacher);
+        }
+
+        /// <summary>
+        /// updates a teacher's information based on form submission.
+        /// </summary>
+        /// <param name="id">The ID of the teacher to update.</param>
+        /// <param name="TeacherFName">The updated first name of the teacher.</param>
+        /// <param name="TeacherLName">The updated last name of the teacher.</param>
+        /// <param name="EmployeeNumber">The updated employee number of the teacher.</param>
+        /// <param name="HireDate">The updated hire date of the teacher.</param>
+        /// <param name="Salary">The updated salary of the teacher.</param>
+        /// <example>
+        /// POST: /TeacherPage/Edit/1
+        /// </example>
+        /// <returns>Redirects to the Show view for the updated teacher or displays validation errors.</returns>
+        [HttpPost]
+        public IActionResult Update(int id, string TeacherFName, string TeacherLName, string EmployeeNumber, DateTime HireDate, decimal Salary)
+        {
+            // Error message for if teacher name is empty
+            if (string.IsNullOrEmpty(TeacherFName) || string.IsNullOrEmpty(TeacherLName))
+            {
+                ViewBag.ClientError = "Please fill the teacher's name.";
+                // Return the Edit view with the current teacher's data and error message
+                return View("Edit", new Teacher
+                {
+                    TeacherId = id,
+                    TeacherFName = TeacherFName,
+                    TeacherLName = TeacherLName,
+                    EmployeeNumber = EmployeeNumber,
+                    HireDate = HireDate,
+                    Salary = Salary
+                });
+            }
+
+            // Error message for if hire date is in the future
+            if (HireDate > DateTime.Now)
+            {
+                ViewBag.ClientError = "Hire date cannot be in the future.";
+                return View("Edit", new Teacher
+                {
+                    TeacherId = id,
+                    TeacherFName = TeacherFName,
+                    TeacherLName = TeacherLName,
+                    EmployeeNumber = EmployeeNumber,
+                    HireDate = HireDate,
+                    Salary = Salary
+                });
+            }
+
+            // Error message for if salary is less than zero
+            if (Salary < 0)
+            {
+                ViewBag.ClientError = "Please fill salary with the correct value.";
+                return View("Edit", new Teacher
+                {
+                    TeacherId = id,
+                    TeacherFName = TeacherFName,
+                    TeacherLName = TeacherLName,
+                    EmployeeNumber = EmployeeNumber,
+                    HireDate = HireDate,
+                    Salary = Salary
+                });
+            }
+
+            // If validation passes, proceed to update teacher
+            Teacher UpdatedTeacher = new Teacher
+            {
+                TeacherId = id,
+                TeacherFName = TeacherFName,
+                TeacherLName = TeacherLName,
+                EmployeeNumber = EmployeeNumber,
+                HireDate = HireDate,
+                Salary = Salary
+            };
+
+            _api.UpdateTeacher(id, UpdatedTeacher);
+
+            // Redirect to the Show page after successful update
+            return RedirectToAction("Show", new { id = id });
+        }
+
+
+
     }
 }

@@ -316,5 +316,57 @@ namespace School.Controllers
             return 0;
         }
 
+
+        /// <summary>
+        /// Updates a teacher's information in the database.
+        /// </summary>
+        /// <param name="id">The ID of the teacher to update.</param>
+        /// <param name="TeacherData">A Teacher object with updated information.</param>
+        /// <example>
+        /// PUT: api/Teacher/UpdateTeacher/1
+        /// Body:
+        /// {
+        ///     "TeacherFName": "Jon",
+        ///     "TeacherLName": "Snow",
+        ///     "EmployeeNumber": "N01234",
+        ///     "HireDate": "2024-01-01",
+        ///     "Salary": 80000.00
+        /// }
+        /// </example>
+        /// <returns>
+        /// The updated Teacher object 
+        /// </returns>
+        [HttpPut(template: "UpdateTeacher/{id}")]
+        public Teacher UpdateTeacher(int id, [FromBody] Teacher TeacherData)
+        {
+            using (MySqlConnection Connection = _context.AccessDatabase())
+            {
+                Connection.Open();
+                MySqlCommand Command = Connection.CreateCommand();
+
+     
+
+                // parameterized SQL query to update the teacher
+                Command.CommandText = "UPDATE teachers SET teacherfname = @TeacherFName, teacherlname = @TeacherLName, " +
+                                      "employeenumber = @EmployeeNumber, hiredate = @HireDate, salary = @Salary " +
+                                      "WHERE teacherid = @TeacherId";
+                Command.Parameters.AddWithValue("@TeacherFName", TeacherData.TeacherFName);
+                Command.Parameters.AddWithValue("@TeacherLName", TeacherData.TeacherLName);
+                Command.Parameters.AddWithValue("@EmployeeNumber", TeacherData.EmployeeNumber);
+                Command.Parameters.AddWithValue("@HireDate", TeacherData.HireDate);
+                Command.Parameters.AddWithValue("@Salary", TeacherData.Salary);
+                Command.Parameters.AddWithValue("@TeacherId", id);
+
+                Command.ExecuteNonQuery();
+
+               
+            }
+
+            return FindTeacher(id); // return the updated teacher
+        }
+
+        
+
+
     }
 }

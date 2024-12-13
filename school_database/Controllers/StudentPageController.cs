@@ -99,5 +99,41 @@ namespace School.Controllers
             _api.DeleteStudent(id);
             return RedirectToAction("List");
         }
-    }
+
+		public IActionResult Edit(int id)
+		{
+			Student SelectedStudent = _api.FindStudent(id);
+			if (SelectedStudent.StudentId == 0)
+			{
+				ViewBag.ErrorMessage = "Student not found. Please check the ID.";
+				return View("StudentError");
+			}
+			return View(SelectedStudent);
+		}
+
+		[HttpPost]
+		public IActionResult Update(int id, string StudentFName, string StudentLName, string StudentNumber, DateTime EnrollDate)
+		{
+			// if student name is empty
+			if (string.IsNullOrEmpty(StudentFName) || string.IsNullOrEmpty(StudentLName))
+			{
+				ViewBag.ClientError = "Please fill student name.";
+                return Edit(id);
+            }
+			
+
+			Student UpdatedStudent = new Student
+			{
+				StudentFName = StudentFName,
+				StudentLName = StudentLName,
+				StudentNumber = StudentNumber,
+				EnrollDate = EnrollDate
+			};
+
+			_api.UpdateStudent(id, UpdatedStudent);
+			return RedirectToAction("Show", new { id = id });
+		}
+
+
+	}
 }

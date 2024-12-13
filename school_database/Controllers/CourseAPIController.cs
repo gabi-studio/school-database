@@ -223,5 +223,57 @@ namespace School.Controllers
 
 			return 0;
 		}
+
+		/// <summary>
+		/// Updates a course's information in the database.
+		/// </summary>
+		/// <param name="id">The ID of the course to update.</param>
+		/// <param name="CourseData">A Course object with updated information.</param>
+		/// <example>
+		/// PUT: api/Course/UpdateCourse/1
+		/// Body:
+		/// {
+		///     "CourseCode": "HTTP5888",
+		///     "TeacherId": 1,
+		///     "StartDate": "2025-01-08",
+		///     "FinishDate": "2024-05-14",
+		///     "CourseName": "Web Entrepreneurship"
+		/// }
+		/// </example>
+		/// <returns>
+		/// The updated Course object or an appropriate error message if the update fails.
+		/// </returns>
+		[HttpPut]
+		[Route("UpdateCourse/{id}")]
+		public IActionResult UpdateCourse(int id, [FromBody] Course CourseData)
+		{
+			using (MySqlConnection Connection = _context.AccessDatabase())
+			{
+				Connection.Open();
+				MySqlCommand Command = Connection.CreateCommand();
+
+
+				// Parameterized SQL query to update the course
+				Command.CommandText = "UPDATE courses SET coursecode = @CourseCode, teacherid = @TeacherId, " +
+									  "startdate = @StartDate, finishdate = @FinishDate, coursename = @CourseName " +
+									  "WHERE courseid = @CourseId";
+				Command.Parameters.AddWithValue("@CourseCode", CourseData.CourseCode);
+				Command.Parameters.AddWithValue("@TeacherId", CourseData.TeacherId);
+				Command.Parameters.AddWithValue("@StartDate", CourseData.StartDate);
+				Command.Parameters.AddWithValue("@FinishDate", CourseData.FinishDate);
+				Command.Parameters.AddWithValue("@CourseName", CourseData.CourseName);
+				Command.Parameters.AddWithValue("@CourseId", id);
+
+				int RowsAffected = Command.ExecuteNonQuery();
+
+				if (RowsAffected == 0)
+				{
+					return NotFound("Course not found.");
+				}
+			}
+
+			return Ok(FindCourse(id)); // Return the updated course
+		}
+
 	}
 }
